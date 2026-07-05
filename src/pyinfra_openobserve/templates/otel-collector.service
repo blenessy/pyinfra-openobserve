@@ -1,0 +1,15 @@
+[Unit]
+Description=OpenTelemetry Collector
+After=network.target network-online.target
+
+[Service]
+ExecStart="{{ o2_agent_home }}/bin/otelcol-contrib" --config "{{ o2_agent_home }}/etc/otel-config.yaml"
+User={{ o2_agent_user }}
+Group={{ o2_agent_user }}
+NoNewPrivileges=true
+ProtectHome=read-only
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
