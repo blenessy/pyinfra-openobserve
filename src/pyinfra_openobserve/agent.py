@@ -154,9 +154,7 @@ def configure_openobserve_agent(
     """Configure the OpenObserve Agent on the host."""
     otel_config = files.template(
         name="Upload otel-config.yaml",
-        src=find_template(
-            "otel-config.yaml", primary_templates_path=primary_templates_path
-        ),
+        src=find_template("otel-config.yaml", primary_templates_path=primary_templates_path),
         dest=os.path.join(host.data.o2_agent_home, "etc", "otel-config.yaml"),
         o2_otel_url=otel_url,
         o2_otel_auth_header=otel_auth_header(username, password),
@@ -165,9 +163,7 @@ def configure_openobserve_agent(
 
     service_config = files.template(
         name="Upload otel-collector.service",
-        src=find_template(
-            "otel-collector.service", primary_templates_path=primary_templates_path
-        ),
+        src=find_template("otel-collector.service", primary_templates_path=primary_templates_path),
         dest="/etc/systemd/system/otel-collector.service",
         o2_agent_home=host.data.o2_agent_home,
         o2_agent_user=host.data.o2_agent_user,

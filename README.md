@@ -29,6 +29,24 @@ modified templates (if those exist), falling back to the default template if doe
 | `password` | | OpenObserve password |
 | `primary_templates_path` | None | Load templates from this path before falling back to the default templates path |
 
+## deploy_openobserve_server
+
+### Arguments
+
+| Key | Default | Description |
+| --- | --- | --- |
+| `root_user_email` | | OpenObserve root user email |
+| `root_user_password` | | OpenObserve root user password |
+| `primary_templates_path` | None | Load templates from this path before falling back to the default templates path |
+
+### Edition
+
+The server defaults to the Open Source (`o2`) edition. Set `o2_server_edition: "o2-enterprise"` in your inventory to install the Enterprise build instead.
+
+### Security notes
+
+The rendered `openobserve.env` (containing the root user password) is written with mode `0640` and owned by the `openobserve-server` user and group. Never commit real `root_user_password` values in inventory files.
+
 
 ## NOTICE
 

@@ -1,4 +1,4 @@
-"""Default host.data values for OpenObserve Agentdeployments."""
+"""Default host.data values for OpenObserve Agent and Server deployments."""
 
 DEFAULTS = {
     "o2_agent_otelcol_version": "0.111.0",
@@ -17,4 +17,24 @@ DEFAULTS = {
     "o2_agent_groups": ["adm", "systemd-journal"],
     "o2_agent_shell": "/bin/sh",
     "o2_agent_home": "/opt/openobserve-agent",
+    # OpenObserve Server defaults
+    "o2_server_version": "0.91.4",
+    # NOTE: edition "o2" is the OSS build; "o2-enterprise" is the Enterprise build (free up to 50 GB/day ingestion)
+    "o2_server_edition": "o2",
+    "o2_server_download_base_url": "https://downloads.openobserve.ai/releases",
+    # TODO: replace the placeholder SHA256 sums with real values from downloads.openobserve.ai
+    "o2_server_sha256sums": {
+        "linux": {
+            "amd64": "<TODO: sha256 for openobserve-0.91.4-linux-amd64.tar.gz>",
+            "arm64": "<TODO: sha256 for openobserve-0.91.4-linux-arm64.tar.gz>",
+        },
+    },
+    "o2_server_user": "openobserve-server",
+    "o2_server_group": "openobserve-server",
+    "o2_server_shell": "/bin/sh",
+    "o2_server_home": "/opt/openobserve-server",
+    "o2_server_data_dir": "/opt/openobserve-server/data",
+    # NOTE: binding to all interfaces is intentional for a network server
+    "o2_server_bind_addr": "0.0.0.0",  # noqa: S104
+    "o2_server_http_port": 5080,
 }

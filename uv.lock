@@ -692,21 +692,19 @@ wheels = [
 name = "pyinfra-openobserve"
 version = "0.1.0"
 source = { editable = "." }
-dependencies = [
-    { name = "pyinfra" },
-]
 
 [package.dev-dependencies]
 dev = [
+    { name = "pyinfra" },
     { name = "ruff" },
     { name = "ty" },
 ]
 
 [package.metadata]
-requires-dist = [{ name = "pyinfra", specifier = ">=3.9,<4.0" }]
 
 [package.metadata.requires-dev]
 dev = [
+    { name = "pyinfra", specifier = ">=3.9,<4.0" },
     { name = "ruff", specifier = "==0.15.12" },
     { name = "ty", specifier = "==0.0.33" },
 ]

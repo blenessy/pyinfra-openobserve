@@ -1,0 +1,16 @@
+[Unit]
+Description=OpenObserve Server {{ host_data.o2_server_version }}
+After=network.target network-online.target
+
+[Service]
+EnvironmentFile={{ o2_server_env_file }}
+ExecStart="{{ o2_server_home }}/bin/openobserve"
+User={{ o2_server_user }}
+Group={{ o2_server_group }}
+NoNewPrivileges=true
+ProtectHome=read-only
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
