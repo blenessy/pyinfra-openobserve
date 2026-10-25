@@ -18,15 +18,30 @@ DEFAULTS = {
     "o2_agent_shell": "/bin/sh",
     "o2_agent_home": "/opt/openobserve-agent",
     # OpenObserve Server defaults
-    "o2_server_version": "0.91.4",
-    # NOTE: edition "o2" is the OSS build; "o2-enterprise" is the Enterprise build (free up to 50 GB/day ingestion)
-    "o2_server_edition": "o2",
+    "o2_server_version": "1.1.2",
+    # NOTE: "opensource" is the AGPL build; "enterprise" is the Enterprise build (free up to 50 GB/day ingestion)
+    "o2_server_edition": "opensource",
     "o2_server_download_base_url": "https://downloads.openobserve.ai/releases",
-    # TODO: replace the placeholder SHA256 sums with real values from downloads.openobserve.ai
+    # SHA256 sums from the official <tarball>.sha256sum files, keyed by edition, OS and arch
     "o2_server_sha256sums": {
-        "linux": {
-            "amd64": "<TODO: sha256 for openobserve-0.91.4-linux-amd64.tar.gz>",
-            "arm64": "<TODO: sha256 for openobserve-0.91.4-linux-arm64.tar.gz>",
+        "opensource": {
+            "linux": {
+                "amd64": "225883447a9e3c75cb52d5a64ece8618cf0d8f3d2eb0b424eebb2e51b0126faa",
+                "arm64": "4d00e03155594dba473202fdca4f2b8c3b549138f9bab4ff0f6894feda4b7354",
+            },
+            "darwin": {
+                "amd64": "196861f7beadb533be782f2d98e5458a9a8c383e802f0d108115eddb296cc2f4",
+                "arm64": "7914ece4258747ec569504f80f370292f2706112defeb555e6c4e731fd518e45",
+            },
+        },
+        "enterprise": {
+            "linux": {
+                "amd64": "7d1e3d838a3361e404f0cac518c52deeed3451828fcf702710bffe8b21904634",
+                "arm64": "8e2d8c1342f68847a12917c69cea577a08a69c70c2b825511798ca5bc630bebb",
+            },
+            "darwin": {
+                "arm64": "2ffe3f374def1c94f4244d29490c71527908a6404f7e37683a91a83854f5968c",
+            },
         },
     },
     "o2_server_user": "openobserve-server",

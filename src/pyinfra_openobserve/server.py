@@ -11,12 +11,25 @@ from pyinfra.operations import files, python, server, systemd
 from .agent import find_template, raise_deploy_error
 from .defaults import DEFAULTS
 
+# maps o2_server_edition to the download directory and the tarball name prefix
+O2_SERVER_EDITIONS = {
+    "opensource": ("openobserve", "openobserve"),
+    "enterprise": ("o2-enterprise", "openobserve-ee"),
+}
+
 
 @deploy("Install OpenObserve Server", data_defaults=DEFAULTS)
 def install_openobserve_server() -> None:
     """Install the OpenObserve Server using the official OpenObserve binary."""
     if not host.data.o2_server_version:
         raise_deploy_error("o2_server_version is not set for this host")
+    if host.data.o2_server_edition not in O2_SERVER_EDITIONS:
+        raise_deploy_error(
+            "o2_server_edition must be one of {}, got {!r}".format(
+                ", ".join(O2_SERVER_EDITIONS),
+                host.data.o2_server_edition,
+            ),
+        )
 
     # set host data
     host.data.o2_server_arch = {
@@ -24,14 +37,19 @@ def install_openobserve_server() -> None:
         "aarch64": "arm64",
     }.get(host.get_fact(Arch), host.get_fact(Arch))
     host.data.o2_server_os = host.get_fact(Os).lower()
-    host.data.o2_server_tarball_name = "openobserve-{}_{}_{}.tar.gz".format(
+    download_dir, tarball_prefix = O2_SERVER_EDITIONS[host.data.o2_server_edition]
+    host.data.o2_server_dir_name = "{}-v{}-{}-{}".format(
+        tarball_prefix,
         host.data.o2_server_version,
         host.data.o2_server_os,
         host.data.o2_server_arch,
     )
-    host.data.o2_server_download_url = "{}/{}/{}/{}".format(
+    host.data.o2_server_tarball_name = "{}.tar.gz".format(
+        host.data.o2_server_dir_name,
+    )
+    host.data.o2_server_download_url = "{}/{}/v{}/{}".format(
         host.data.o2_server_download_base_url,
-        host.data.o2_server_edition,
+        download_dir,
         host.data.o2_server_version,
         host.data.o2_server_tarball_name,
     )
@@ -46,16 +64,18 @@ def install_openobserve_server() -> None:
     )
     host.data.o2_server_bin_cache_dir = os.path.join(
         host.data.o2_server_cache_dir,
-        "openobserve-{}_{}_{}".format(
-            host.data.o2_server_version,
-            host.data.o2_server_os,
-            host.data.o2_server_arch,
-        ),
+        host.data.o2_server_dir_name,
+    )
+
+    server.group(
+        name="Create the openobserve-server group",
+        group=host.data.o2_server_group,
     )
 
     server.user(
         name="Create the openobserve-server user",
         user=host.data.o2_server_user,
+        group=host.data.o2_server_group,
         shell=host.data.o2_server_shell,
         home=host.data.o2_server_home,
         create_home=True,
@@ -76,9 +96,11 @@ def install_openobserve_server() -> None:
         group=host.data.o2_server_group,
     )
 
-    expected_sha256 = host.data.o2_server_sha256sums.get(
-        host.data.o2_server_os,
-    ).get(host.data.o2_server_arch)
+    expected_sha256 = (
+        host.data.o2_server_sha256sums.get(host.data.o2_server_edition, {})
+        .get(host.data.o2_server_os, {})
+        .get(host.data.o2_server_arch)
+    )
     if expected_sha256:
         actual_sha256 = host.get_fact(
             Sha256File,
@@ -126,7 +148,7 @@ def install_openobserve_server() -> None:
     )
 
 
-@deploy("Install OpenObserve Server", data_defaults=DEFAULTS)
+@deploy("Configure OpenObserve Server", data_defaults=DEFAULTS)
 def configure_openobserve_server(
     root_user_email: str,
     root_user_password: str,
@@ -141,6 +163,9 @@ def configure_openobserve_server(
         dest=env_file,
         o2_server_root_user_email=root_user_email,
         o2_server_root_user_password=root_user_password,
+        o2_server_data_dir=host.data.o2_server_data_dir,
+        o2_server_bind_addr=host.data.o2_server_bind_addr,
+        o2_server_http_port=host.data.o2_server_http_port,
         host_data=host.data,  # allow the template to reference host data
         mode="0640",
         user=host.data.o2_server_user,

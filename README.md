@@ -39,9 +39,22 @@ modified templates (if those exist), falling back to the default template if doe
 | `root_user_password` | | OpenObserve root user password |
 | `primary_templates_path` | None | Load templates from this path before falling back to the default templates path |
 
+This installs a single-node OpenObserve Server from the official release binaries at
+`downloads.openobserve.ai`, verifies the tarball's SHA256, and runs it as the `openobserve`
+systemd service listening on `o2_server_bind_addr:o2_server_http_port` (default `0.0.0.0:5080`)
+with data stored in `o2_server_data_dir`.
+
+The root user credentials are only used by OpenObserve on first startup; changing them
+afterwards does not change the existing root user's password.
+
 ### Edition
 
-The server defaults to the Open Source (`o2`) edition. Set `o2_server_edition: "o2-enterprise"` in your inventory to install the Enterprise build instead.
+The server defaults to the Open Source (`opensource`) edition. Set `o2_server_edition: "enterprise"`
+in your inventory to install the Enterprise build instead.
+
+SHA256 sums for each edition, OS and architecture are listed in `o2_server_sha256sums`. If you
+override `o2_server_version`, also override `o2_server_sha256sums` with the values from the
+official `<tarball>.sha256sum` files, otherwise the checksum verification is skipped.
 
 ### Security notes
 

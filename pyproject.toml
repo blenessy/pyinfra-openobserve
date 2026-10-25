@@ -3,7 +3,7 @@ name = "pyinfra-openobserve"
 version = "0.1.0"
 description = "OpenObserver deployment package for pyinfra"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 
 # this is a "plugin" to pyinfra - use whatever version we get
 dependencies = []
@@ -11,8 +11,8 @@ dependencies = []
 [dependency-groups]
 dev = [
     "pyinfra>=3.9,<4.0",
-    "ruff==0.16.0",
-    "ty==0.0.64",
+    "ruff==0.17.2",
+    "ty==0.0.91",
 ]
 
 [tool.ruff]
@@ -35,5 +35,5 @@ ignore = [
 
 
 [build-system]
-requires = ["uv_build>=0.11.26,<0.12"]
+requires = ["uv_build>=0.13.5,<0.14"]
 build-backend = "uv_build"
