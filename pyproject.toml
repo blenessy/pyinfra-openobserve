@@ -11,21 +11,22 @@ dependencies = []
 [dependency-groups]
 dev = [
     "pyinfra>=3.9,<4.0",
-    "ruff==0.15.12",
-    "ty==0.0.33",
+    "ruff==0.16.0",
+    "ty==0.0.64",
 ]
 
 [tool.ruff]
 line-length = 120
-exclude = ["example"]
 
 [tool.ruff.lint]
 select = ["ALL"]
 ignore = [
     "COM812", # resolve conflict with lint
+    "CPY001", # Copyright (C) 2026 Zalan Blenessy if it matters for somebody
     "D203",   # resolve conflict with D211
     "D212",   # resolve conflict with D212
     "FIX002", # TODOs are ok
+    "INP001", # Don't care about implicit namespaces for pyinfra code
     "FBT",    # ok to use Boolean-typed positional argument in function definition
     "PTH",    # deliberately using os.path instead of pathlib (might refactor later)
     "TD",     # TODOs are ok

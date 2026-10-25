@@ -1,6 +1,9 @@
+"""Example deployment of the OpenObserve OTEL agent and the OpenObserve Server."""
+
 import os
 
 from pyinfra import host
+
 from pyinfra_openobserve import deploy_openobserve_agent, deploy_openobserve_server
 
 primary_templates_path = os.path.join(os.path.dirname(__file__), "templates")
